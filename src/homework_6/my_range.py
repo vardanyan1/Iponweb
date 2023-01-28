@@ -96,14 +96,14 @@ class MyRange:
             raise MyRangeException("Step must be integer")
 
 
-a = MyRange(1, 4, 1)
-b = reversed(a)
-print(f"a: {a}\nb: {b}")
-b.current = 10
-print(f"Change state of b to: {b.current}")
-print(f"Get b end: {b.end}")
-print(f"Get b length: {len(b)}")
-print(f"Get last item: {a[-1]}")
-print(f"Get length: {len(a)}")
-print(f"a: {[i for i in b]}")
-print(f"b: {[i for i in a]}")
+# a = MyRange(1, 4, 1)
+# b = reversed(a)
+# print(f"a: {a}\nb: {b}")
+# b.current = 10
+# print(f"Change state of b to: {b.current}")
+# print(f"Get b end: {b.end}")
+# print(f"Get b length: {len(b)}")
+# print(f"Get last item: {a[-1]}")
+# print(f"Get length: {len(a)}")
+# print(f"a: {[i for i in b]}")
+# print(f"b: {[i for i in a]}")

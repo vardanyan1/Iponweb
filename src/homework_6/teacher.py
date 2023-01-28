@@ -89,13 +89,13 @@ class Teacher(Person):
             raise TeacherException("Salary must be Money class")
 
 
-mayor1 = Person(name="John", surname="Siemens", age=60, gender="M", address="Cambridge 24/44")
-city1 = City(name="Cambridge", founded_at=Date(1600), mayor=mayor1, population=30000000, language="English")
-rector1 = Person(name="Adam", surname="Johns", age=50, gender="M", address="San Marino 55/88")
-uni1 = University(name="Harvard", founded_at=Date(1800), rector=rector1, city=city1)
-
-teacher1 = Teacher(name="Sam", surname="Rogers", age=60, gender="M", address="San Andreas 55/88", university=uni1,
-                   faculty="Economics", experience=40, started_year=Date(1960), subject="Macroeconomics",
-                   salary=Money(48000, "usd"))
+# mayor1 = Person(name="John", surname="Siemens", age=60, gender="M", address="Cambridge 24/44")
+# city1 = City(name="Cambridge", founded_at=Date(1600), mayor=mayor1, population=30000000, language="English")
+# rector1 = Person(name="Adam", surname="Johns", age=50, gender="M", address="San Marino 55/88")
+# uni1 = University(name="Harvard", founded_at=Date(1800), rector=rector1, city=city1)
+#
+# teacher1 = Teacher(name="Sam", surname="Rogers", age=60, gender="M", address="San Andreas 55/88", university=uni1,
+#                    faculty="Economics", experience=40, started_year=Date(1960), subject="Macroeconomics",
+#                    salary=Money(48000, "usd"))
 
 # print(teacher1)

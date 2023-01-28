@@ -85,8 +85,8 @@ class City:
             raise CityException("language must be string")
 
 
-mayor1 = Person(name="Hayk", surname="Marutyan", age=45, gender="M", address="Hyusisayin st. 23")
-city1 = City(name="Yerevan", founded_at=Date(100, 1, 1), mayor=mayor1, population=1800000, language="Armenian")
-print(f"New City: {city1}")
-city1.population = 1000000
-print(f"Changed population to {city1.population}")
+# mayor1 = Person(name="Hayk", surname="Marutyan", age=45, gender="M", address="Hyusisayin st. 23")
+# city1 = City(name="Yerevan", founded_at=Date(100, 1, 1), mayor=mayor1, population=1800000, language="Armenian")
+# print(f"New City: {city1}")
+# city1.population = 1000000
+# print(f"Changed population to {city1.population}")
