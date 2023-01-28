@@ -1,11 +1,10 @@
 from my_execptions import NodeException
 
 class Node:
-    def __init__(self, value: int, parent: "Node" = None, left: "Node" = None, right: "Node" = None):
+    def __init__(self, value: int, left: "Node" = None, right: "Node" = None):
         if not isinstance(value, int):
             raise NodeException("Node value must be integer")
         self.__value = value
-        self.__parent = parent
         self.__left = left
         self.__right = right
 
@@ -21,16 +20,6 @@ class Node:
         if not isinstance(new_value, int):
             raise NodeException("Node value must be integer")
         self.__value = new_value
-
-    @property
-    def parent(self):
-        return f"Parent Node: {self.__parent}"
-
-    @parent.setter
-    def parent(self, new_parent):
-        if not isinstance(new_parent, Node):
-            raise NodeException("Parent Node must be Node class")
-        self.__parent = new_parent
 
     @property
     def left(self):
