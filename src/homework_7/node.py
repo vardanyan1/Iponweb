@@ -7,6 +7,7 @@ class Node:
         self.__value = value
         self.__left = left
         self.__right = right
+        self.__count = 1
 
     def __repr__(self):
         return f"Node value: {self.__value}"
@@ -20,6 +21,16 @@ class Node:
         if not isinstance(new_value, int):
             raise NodeException("Node value must be integer")
         self.__value = new_value
+
+    @property
+    def count(self):
+        return self.__count
+
+    @count.setter
+    def count(self, new_count):
+        if not isinstance(new_count, int) and not new_count > 0:
+            raise NodeException("Node count must be integer")
+        self.__count = new_count
 
     @property
     def left(self):
