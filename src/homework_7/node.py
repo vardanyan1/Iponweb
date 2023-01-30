@@ -50,4 +50,4 @@ class Node:
     def right(self, new_right):
         if not isinstance(new_right, Node):
             raise NodeException("Right Node must be Node class")
-        self.__left = new_right
+        self.__right = new_right
