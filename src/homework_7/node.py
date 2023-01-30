@@ -44,7 +44,7 @@ class Node:
 
     @property
     def right(self):
-        self.__right
+        return self.__right
 
     @right.setter
     def right(self, new_right):
