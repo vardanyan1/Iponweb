@@ -34,7 +34,7 @@ class Node:
 
     @property
     def left(self):
-        return f"Left Node: {self.__left}"
+        return self.__left
 
     @left.setter
     def left(self, new_left):
@@ -44,7 +44,7 @@ class Node:
 
     @property
     def right(self):
-        return f"Right Node: {self.__right}"
+        self.__right
 
     @right.setter
     def right(self, new_right):
