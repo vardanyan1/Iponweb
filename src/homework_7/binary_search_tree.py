@@ -1,6 +1,7 @@
 from my_execptions import BinarySearchTreeException
 from node import Node
 
+
 class BinarySearchTree:
     def __init__(self, head: int = None):
         if (not isinstance(head, int)) or (head is not None):
@@ -35,16 +36,30 @@ class BinarySearchTree:
                 current_node.left = self.__insertion(current_node.left, new_node)
         return current_node
 
+    def travers(self):
+        print(self.__travers(current_node=self.__head, string="Inorder: "))
+
+    def __travers(self, current_node: Node, string: str):
+        if current_node is not None:
+            string = self.__travers(current_node.left, string)
+            string += f"{current_node.value}({current_node.count}) "
+            string = self.__travers(current_node.right, string)
+        return string
 
 
 tree = BinarySearchTree(120)
 print(tree)
 tree.insert(Node(20))
+tree.insert(Node(18))
+tree.insert(Node(19))
+
 print(f"head.right: {tree.head.right}")
 tree.insert(Node(210))
 print(f"head.left: {tree.head.right}")
 tree.insert(Node(10))
-print(f"head.left: {tree.head.left.left}")
+tree.insert(Node(10))
+print(f"head.left.left: {tree.head.left.left}")
+print(tree.travers())
 # print(tree.head.right)
 # print(tree.head.left)
 # # tree.insert(Node(1))
