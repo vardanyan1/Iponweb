@@ -65,10 +65,44 @@ class Sorting:
                 j -= 1
         return result
 
+    @staticmethod
+    def counting_sort(items: List[int], reverse: bool = False,
+                      use_anyway: bool = False) -> List[int]:
+        if not isinstance(items, List):
+            raise MySortingException("Items must be list type object")
+        if not all(isinstance(item, int) and item >= 0 for item in items):
+            raise MySortingException("All items in the list must be non-negative int.")
+
+        max_item = max(items)
+        length = len(items)
+
+        if not use_anyway and max_item / length > 3:
+            raise MySortingException("Difference is too big, use other algorythm or change use_anyway to True")
+        if not isinstance(reverse, bool):
+            raise MySortingException("Reverse must be bool type object")
+
+        indexing_list = [0 for _ in range(max_item+1)]
+        for item in items:
+            indexing_list[item] += 1
+
+        result = []
+        if not reverse:
+            for i in range(max_item+1):
+                for j in range(indexing_list[i]):
+                    result.append(i)
+        else:
+            for i in range(max_item+1 - 1, -1, -1):
+                for j in range(indexing_list[i]):
+                    result.append(i)
+        return result
+
 
 items1 = [-6, 1, 2, 3, 5.5, 5.4, 4, -1, -66, -12]
+items2 = [1, 2, 0, 3, 4, 5, 12, 7, 7, 10]
 
 print(f"Merge Sorted: {Sorting.merge_sort(items1, reverse=False)}")
 print(f"Merge Reversed: {Sorting.merge_sort(items1, reverse=True)}")
 print(f"Insertion Sorted: {Sorting.insertion_sort(items1, reverse=False)}")
 print(f"Insertion Reversed: {Sorting.insertion_sort(items1, reverse=True)}")
+print(f"Counting Sorted: {Sorting.counting_sort(items2, reverse=False)}")
+print(f"Counting Reversed: {Sorting.counting_sort(items2, reverse=True)}")
