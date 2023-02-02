@@ -3,3 +3,6 @@ class NodeException(Exception):
 
 class BinarySearchTreeException(Exception):
     pass
+
+class MySortingException(Exception):
+    pass
