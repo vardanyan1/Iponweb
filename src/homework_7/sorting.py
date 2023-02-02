@@ -66,8 +66,7 @@ class Sorting:
         return result
 
     @staticmethod
-    def counting_sort(items: List[int], reverse: bool = False,
-                      use_anyway: bool = False) -> List[int]:
+    def counting_sort(items: List[int], reverse: bool = False, use_anyway: bool = False) -> List[int]:
         if not isinstance(items, List):
             raise MySortingException("Items must be list type object")
         if not all(isinstance(item, int) and item >= 0 for item in items):
@@ -80,6 +79,8 @@ class Sorting:
             raise MySortingException("Difference is too big, use other algorythm or change use_anyway to True")
         if not isinstance(reverse, bool):
             raise MySortingException("Reverse must be bool type object")
+        if not isinstance(use_anyway, bool):
+            raise MySortingException("use_anyway must be bool type object")
 
         indexing_list = [0 for _ in range(max_item+1)]
         for item in items:
