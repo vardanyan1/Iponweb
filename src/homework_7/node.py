@@ -1,4 +1,5 @@
 from my_execptions import NodeException
+from typing import Union
 
 class Node:
     def __init__(self, value: int, left: "Node" = None, right: "Node" = None):
@@ -38,8 +39,8 @@ class Node:
 
     @left.setter
     def left(self, new_left):
-        if not isinstance(new_left, Node):
-            raise NodeException("Left Node must be Node class")
+        if not isinstance(new_left, (Node, type(None))):
+            raise NodeException(f"Left Node must be Node class, you passed: {new_left}")
         self.__left = new_left
 
     @property
@@ -48,6 +49,6 @@ class Node:
 
     @right.setter
     def right(self, new_right):
-        if not isinstance(new_right, Node):
-            raise NodeException("Right Node must be Node class")
+        if not isinstance(new_right, (Node, type(None))):
+            raise NodeException(f"Right Node must be Node class, you passed: {new_right}")
         self.__right = new_right
