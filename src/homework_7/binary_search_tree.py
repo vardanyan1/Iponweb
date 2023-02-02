@@ -22,7 +22,10 @@ class BinarySearchTree:
         if not isinstance(new_node, int):
             raise BinarySearchTreeException("New node must be integer")
         new_node = Node(new_node)
-        self.__insertion(current_node=self.__head, new_node=new_node)
+        if self.__head is None:
+            self.__head = new_node
+        else:
+            self.__insertion(current_node=self.__head, new_node=new_node)
 
     def __insertion(self, current_node: Node, new_node: Node):
         if current_node is None:
@@ -85,6 +88,9 @@ class BinarySearchTree:
 
         return current_node
 
+    def search(self, value: int):
+        pass
+
 
 tree = BinarySearchTree(120)
 print(tree)
@@ -110,4 +116,7 @@ tree.delete(120)
 tree.delete(120)
 tree.travers()
 print(tree)
+tree.insert(20)
+print(tree)
+
 
