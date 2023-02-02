@@ -4,8 +4,10 @@ from node import Node
 
 class BinarySearchTree:
     def __init__(self, head: int = None):
-        if (not isinstance(head, int)) or (head is not None):
+        if isinstance(head, int) and (head is not None):
             self.__head = Node(head)
+        else:
+            self.__head = None
 
     def __repr__(self):
         return f"BST with head: {self.__head.value if self.__head else None}"
@@ -92,7 +94,7 @@ class BinarySearchTree:
         pass
 
 
-tree = BinarySearchTree(120)
+tree = BinarySearchTree()
 print(tree)
 tree.insert(20)
 tree.insert(18)
@@ -117,6 +119,10 @@ tree.delete(120)
 tree.travers()
 print(tree)
 tree.insert(20)
+tree.insert(20)
+tree.insert(10)
+tree.travers()
+
 print(tree)
 
 
