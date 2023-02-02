@@ -11,7 +11,7 @@ class Node:
         self.__count = 1
 
     def __repr__(self):
-        return f"Node value: {self.__value}"
+        return f"Node with value: {self.__value}"
 
     @property
     def value(self):

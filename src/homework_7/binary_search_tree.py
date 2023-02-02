@@ -43,7 +43,7 @@ class BinarySearchTree:
         return current_node
 
     def travers(self):
-        print(self.__travers(current_node=self.__head, string="Inorder: "))
+        return self.__travers(current_node=self.__head, string="Inorder: ")
 
     def __travers(self, current_node: Node, string: str):
         if current_node is not None:
@@ -90,8 +90,22 @@ class BinarySearchTree:
 
         return current_node
 
-    def search(self, value: int):
-        pass
+    def search(self, search_value: int):
+        if not isinstance(search_value, int):
+            raise BinarySearchTreeException("Searching node must be integer")
+        return self.__searcher(current_node=self.__head, value=search_value)
+
+    def __searcher(self, current_node: Node, value: int):
+        if current_node is None:
+            return None
+
+        if value == current_node.value:
+            return current_node
+
+        if value < current_node.value:
+            return self.__searcher(current_node.left, value)
+        else:
+            return self.__searcher(current_node.right, value)
 
 
 tree = BinarySearchTree()
@@ -107,22 +121,21 @@ tree.insert(10)
 print(f"head.right: {tree.head.right}")
 print(f"head.left: {tree.head.right}")
 print(f"head.left.left: {tree.head.left.left}")
-tree.travers()
-tree.delete(10)
-tree.delete(210)
-tree.delete(10)
-tree.delete(19)
-tree.delete(20)
-tree.delete(18)
-tree.delete(120)
-tree.delete(120)
-tree.travers()
-print(tree)
-tree.insert(20)
-tree.insert(20)
-tree.insert(10)
-tree.travers()
-
-print(tree)
-
+print(tree.travers())
+# tree.delete(10)
+# tree.delete(210)
+# tree.delete(10)
+# tree.delete(19)
+# tree.delete(20)
+# tree.delete(18)
+# tree.delete(120)
+# tree.delete(120)
+# print(tree.travers())
+# print(tree)
+# tree.insert(20)
+# tree.insert(20)
+# tree.insert(10)
+# print(tree.travers())
+print(tree.search(110))
+print(tree.search(10))
 
