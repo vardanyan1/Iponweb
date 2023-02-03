@@ -161,6 +161,8 @@ class Date:
 
     def sub_year(self, years):
         self.__year -= years
+        if self.days_in_month(self.__month, self.__year) < self.__day:
+            self.__day = self.days_in_month(self.__month, self.__year)
 
     def add_day(self, days):
         self.__day += days
@@ -179,6 +181,8 @@ class Date:
 
     def add_year(self, years):
         self.__year += years
+        if self.days_in_month(self.__month, self.__year) < self.__day:
+            self.__day = self.days_in_month(self.__month, self.__year)
 
     @staticmethod
     def check_int_tuple(t):
@@ -368,8 +372,10 @@ class DateTime:
         if extra_day:
             self.date.sub_day(extra_day)
 
-
-# dt = DateTime(2000, 1, 1, 0, 0, 1)
+# dt = DateTime(2000, 2, 29, 0, 0, 1)
+# dt.sub_year(1)
+# dt.add_year(1)
+# dt.add_day(1)
 # dt.sub_second(1)
 # print(dt)
 # date1 = DateTime(2000, 2, 21, 1)
