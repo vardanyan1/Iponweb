@@ -34,36 +34,48 @@ class Time:
         return new_time
 
     def sub_second(self, s: int):
+        extra_day = 0
         self.__second -= s
         while self.__second < 0:
             self.__second += 60
-            self.sub_minute(1)
+            extra_day = self.sub_minute(1)
+        return extra_day
 
     def sub_minute(self, m: int):
+        extra_day = 0
         self.__minute -= m
         while self.__minute < 0:
             self.__minute += 60
-            self.sub_hour(1)
+            extra_day = self.sub_hour(1)
+        return extra_day
 
     def sub_hour(self, h: int):
+        extra_day = (h // 24)
+        if self.__hour - h < 0:
+            extra_day += 1
         self.__hour = (self.__hour - h) % 24
-        return (self.__hour - h) // 24
+        return extra_day
 
     def add_second(self, s: int):
+        extra_day = 0
         self.__second += s
         while self.__second >= 60:
             self.__second -= 60
-            self.add_minute(1)
+            extra_day = self.add_minute(1)
+        return extra_day
 
     def add_minute(self, m: int):
+        extra_day = 0
         self.__minute += m
         while self.__minute >= 60:
             self.__minute -= 60
-            self.add_hour(1)
+            extra_day = self.add_hour(1)
+        return extra_day
 
     def add_hour(self, h: int):
+        extra_day = ((self.__hour + h) // 24)
         self.__hour = (self.__hour + h) % 24
-        return (self.__hour + h) // 24
+        return extra_day
 
     """
     HOUR MINUTE SECOND setter getter
@@ -318,13 +330,19 @@ class DateTime:
         self.date.add_day(d)
 
     def add_hour(self, h: int):
-        self.time.add_hour(h)
+        extra_day = self.time.add_hour(h)
+        if extra_day:
+            self.date.add_day(extra_day)
 
     def add_minute(self, m: int):
-        self.time.add_minute(m)
+        extra_day = self.time.add_minute(m)
+        if extra_day:
+            self.date.add_day(extra_day)
 
     def add_second(self, s: int):
-        self.time.add_second(s)
+        extra_day = self.time.add_second(s)
+        if extra_day:
+            self.date.add_day(extra_day)
 
     def sub_year(self, y: int):
         self.date.sub_year(y)
@@ -336,15 +354,24 @@ class DateTime:
         self.date.sub_day(d)
 
     def sub_hour(self, h: int):
-        self.time.sub_hour(h)
+        extra_day = self.time.sub_hour(h)
+        if extra_day:
+            self.date.sub_day(extra_day)
 
     def sub_minute(self, m: int):
-        self.time.sub_minute(m)
+        extra_day = self.time.sub_minute(m)
+        if extra_day:
+            self.date.sub_day(extra_day)
 
     def sub_second(self, s: int):
-        self.time.sub_second(s)
+        extra_day = self.time.sub_second(s)
+        if extra_day:
+            self.date.sub_day(extra_day)
 
 
+# dt = DateTime(2000, 1, 1, 0, 0, 1)
+# dt.sub_second(1)
+# print(dt)
 # date1 = DateTime(2000, 2, 21, 1)
 # date2 = DateTime(1968, 1, 1, 23)
 # print(f"date1: {date1}, date2: {date2}")
