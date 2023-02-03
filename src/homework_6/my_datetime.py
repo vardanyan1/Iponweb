@@ -312,7 +312,7 @@ class DateTime:
         self.date.add_year(y)
 
     def add_month(self, m: int):
-        self.date.add_year(m)
+        self.date.add_month(m)
 
     def add_day(self, d: int):
         self.date.add_day(d)
@@ -330,7 +330,7 @@ class DateTime:
         self.date.sub_year(y)
 
     def sub_month(self, m: int):
-        self.date.sub_year(m)
+        self.date.sub_month(m)
 
     def sub_day(self, d: int):
         self.date.sub_day(d)
