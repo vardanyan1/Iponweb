@@ -47,5 +47,13 @@ class Hotel:
 
         else:
             self.rooms[type] -= count
+            print(f"Reserved {count} {type} in {self.__city} hotel")
+
+def book():
+    hotel1 = Hotel("Yerevan", {"penthouse": 2, "single": 40, "double": 30})
+    print(f"Created: {hotel1}")
+    hotel1.reserve_rooms("single", 5)
+    print(f"After reservation: {hotel1}")
 
 
+book()
