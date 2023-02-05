@@ -35,10 +35,13 @@ class Inventory:
 
         return sum
 
+def inventory():
 
-p1 = Product(10, 1, 2)
-p2 = Product(20, 2, 2)
-p3 = Product(100, 3, 1)
-inv = Inventory([p1, p2, p3])
-print(inv.get_by_id(2))
-print(inv.sum_of_products())
+    p1 = Product(10, 1, 2)
+    p2 = Product(20, 2, 2)
+    p3 = Product(100, 3, 1)
+    inv = Inventory([p1, p2, p3])
+    print(f"Get by ID: {inv.get_by_id(2)}")
+    print(f"Summ of all: {inv.sum_of_products()}")
+
+inventory()
