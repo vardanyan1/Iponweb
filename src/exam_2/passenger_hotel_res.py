@@ -25,6 +25,17 @@ class Passenger:
     def rooms(self):
         return self.__rooms
 
+    @rooms.setter
+    def rooms(self, key, value):
+        self.__rooms[key] = value
+
+    def reserve(self, hotel: "Hotel", type: str, count: int):
+        hotel.reserve_rooms(type, count)
+        if type in self.rooms.keys():
+            self.rooms[type] += count
+        else:
+            self.rooms[type] = count
+
 
 class Hotel:
     def __init__(self, city: str, rooms: Dict[str, int]):
@@ -51,9 +62,13 @@ class Hotel:
 
 def book():
     hotel1 = Hotel("Yerevan", {"penthouse": 2, "single": 40, "double": 30})
+    pas1 = Passenger("Adam", "Gyumri", {})
     print(f"Created: {hotel1}")
-    hotel1.reserve_rooms("single", 5)
+    hotel1.reserve_rooms("single", 4)
     print(f"After reservation: {hotel1}")
+    pas1.reserve(hotel1, "double", 2)
+    print(pas1.rooms)
+
 
 
 book()

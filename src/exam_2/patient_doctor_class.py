@@ -1,6 +1,5 @@
 from person_job_company import Person
 from typing import Dict
-from money import Money
 from datetime import datetime, timedelta
 from my_exceptions import DoctorException, PatentException
 
