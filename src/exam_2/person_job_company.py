@@ -1,7 +1,8 @@
 from typing import List
-from my_datetime import Date
-from my_exceptions import PersonException, CompanyException, JobException
+# from my_datetime import Date
+# from my_exceptions import PersonException, CompanyException, JobException
 from money import Money
+from my_exceptions import PersonException
 
 class Person:
     def __init__(self, name: str, surname: str, age: int, gender: str, address: str,
@@ -10,7 +11,7 @@ class Person:
             raise PersonException("Surname must be string")
         if not isinstance(surname, str):
             raise PersonException("Name must be string")
-        if not isinstance(age, int) or age < 0:
+        if not isinstance(age, int) or age < 0 or age > 99:
             raise PersonException("Age must be non-negative integer")
         if not isinstance(gender, str) or gender not in ["M", "F"]:
             raise PersonException("Gender must be string M for Male or F for Female")
@@ -156,126 +157,126 @@ class Person:
             raise PersonException(f"Job must be in jobs")
 
 
-class Company:
-    def __init__(self, company_name: str, founded_at: Date, employees_count: int = 0):
-        if not isinstance(company_name, str):
-            raise CompanyException("Company name must be string")
-        if not isinstance(founded_at, Date):
-            raise CompanyException("Company founding dare must be Date class")
-        if not isinstance(employees_count, int) or employees_count < 0:
-            raise CompanyException("Company employee count must be non-negative integer")
-        self.__company_name = company_name
-        self.__founded_at = founded_at
-        self.__employees_count = employees_count
-
-    def __repr__(self):
-        return f"company name: {self.__company_name}, founded at: {self.__founded_at}," \
-               f"employees count: {self.__employees_count}"
-
-    """
-    COMPANY NAME, COMPANY FOUNDING YEAR, EMPLOYEE COUNT setter getter
-    """
-
-    @property
-    def name(self):
-        return self.__company_name
-
-    @name.setter
-    def name(self, new_name):
-        if isinstance(new_name, str):
-            self.__company_name = new_name
-        else:
-            raise CompanyException("Company name must be string")
-
-    @property
-    def founding_year(self):
-        return self.__founded_at
-
-    @founding_year.setter
-    def founding_year(self, new_founding_year):
-        if isinstance(new_founding_year, Date):
-            self.__founded_at = new_founding_year
-        else:
-            raise CompanyException("Founding date must be Date class")
-
-    @property
-    def employee_count(self):
-        return self.__employees_count
-
-    @employee_count.setter
-    def employee_count(self, new_emp_count):
-        if isinstance(new_emp_count, int) and new_emp_count >= 0:
-            self.__employees_count = new_emp_count
-        else:
-            raise CompanyException("Employee count must be non-negative integer")
-
-
-class Job:
-    def __init__(self, company: Company, salary: Money, experience_year: int, position: str):
-        if not isinstance(company, Company):
-            raise JobException("Company must be Company class")
-        if not isinstance(salary, Money):
-            raise JobException("Salary must be Money class")
-        if not isinstance(experience_year, int) or experience_year < 0:
-            raise JobException("Experience year must be non-negative integer")
-        if not isinstance(position, str):
-            raise JobException("Position name must be string")
-        self.__company = company
-        self.__salary = salary
-        self.__experience_year = experience_year
-        self.__position = position
-
-    def __repr__(self):
-        return f"company: {self.__company.name}, salary: {self.__salary}, experience year:" \
-               f"{self.__experience_year}, position: {self.__position}"
-
-    """
-    COMPANY, SALARY, EXPERIENCE YEAR, POSITION getter 
-    """
-
-    @property
-    def company(self):
-        return self.__company
-
-    @company.setter
-    def company(self, new_company: Company):
-        if isinstance(new_company, Company):
-            self.__company = new_company
-        else:
-            raise JobException("Company must be Company class")
-
-    @property
-    def salary(self):
-        return self.__salary
-
-    @salary.setter
-    def salary(self, new_selay):
-        if isinstance(new_selay, Money):
-            self.__salary = new_selay
-        else:
-            raise JobException("Salary must be Money class")
-
-    @property
-    def experience_year(self):
-        return self.__experience_year
-
-    @experience_year.setter
-    def experience_year(self, new_exp_year):
-        if isinstance(new_exp_year, int) and new_exp_year >= 0:
-            self.__experience_year = new_exp_year
-        else:
-            raise JobException("Experience year must be non-negative int")
-
-    @property
-    def position(self):
-        return self.__position
-
-    @position.setter
-    def position(self, new_position):
-        if isinstance(new_position, str):
-            self.__position = new_position
-        else:
-            raise JobException("Position must be string")
+# class Company:
+#     def __init__(self, company_name: str, founded_at: Date, employees_count: int = 0):
+#         if not isinstance(company_name, str):
+#             raise CompanyException("Company name must be string")
+#         if not isinstance(founded_at, Date):
+#             raise CompanyException("Company founding dare must be Date class")
+#         if not isinstance(employees_count, int) or employees_count < 0:
+#             raise CompanyException("Company employee count must be non-negative integer")
+#         self.__company_name = company_name
+#         self.__founded_at = founded_at
+#         self.__employees_count = employees_count
+#
+#     def __repr__(self):
+#         return f"company name: {self.__company_name}, founded at: {self.__founded_at}," \
+#                f"employees count: {self.__employees_count}"
+#
+#     """
+#     COMPANY NAME, COMPANY FOUNDING YEAR, EMPLOYEE COUNT setter getter
+#     """
+#
+#     @property
+#     def name(self):
+#         return self.__company_name
+#
+#     @name.setter
+#     def name(self, new_name):
+#         if isinstance(new_name, str):
+#             self.__company_name = new_name
+#         else:
+#             raise CompanyException("Company name must be string")
+#
+#     @property
+#     def founding_year(self):
+#         return self.__founded_at
+#
+#     @founding_year.setter
+#     def founding_year(self, new_founding_year):
+#         if isinstance(new_founding_year, Date):
+#             self.__founded_at = new_founding_year
+#         else:
+#             raise CompanyException("Founding date must be Date class")
+#
+#     @property
+#     def employee_count(self):
+#         return self.__employees_count
+#
+#     @employee_count.setter
+#     def employee_count(self, new_emp_count):
+#         if isinstance(new_emp_count, int) and new_emp_count >= 0:
+#             self.__employees_count = new_emp_count
+#         else:
+#             raise CompanyException("Employee count must be non-negative integer")
+#
+#
+# class Job:
+#     def __init__(self, company: Company, salary: Money, experience_year: int, position: str):
+#         if not isinstance(company, Company):
+#             raise JobException("Company must be Company class")
+#         if not isinstance(salary, Money):
+#             raise JobException("Salary must be Money class")
+#         if not isinstance(experience_year, int) or experience_year < 0:
+#             raise JobException("Experience year must be non-negative integer")
+#         if not isinstance(position, str):
+#             raise JobException("Position name must be string")
+#         self.__company = company
+#         self.__salary = salary
+#         self.__experience_year = experience_year
+#         self.__position = position
+#
+#     def __repr__(self):
+#         return f"company: {self.__company.name}, salary: {self.__salary}, experience year:" \
+#                f"{self.__experience_year}, position: {self.__position}"
+#
+#     """
+#     COMPANY, SALARY, EXPERIENCE YEAR, POSITION getter
+#     """
+#
+#     @property
+#     def company(self):
+#         return self.__company
+#
+#     @company.setter
+#     def company(self, new_company: Company):
+#         if isinstance(new_company, Company):
+#             self.__company = new_company
+#         else:
+#             raise JobException("Company must be Company class")
+#
+#     @property
+#     def salary(self):
+#         return self.__salary
+#
+#     @salary.setter
+#     def salary(self, new_selay):
+#         if isinstance(new_selay, Money):
+#             self.__salary = new_selay
+#         else:
+#             raise JobException("Salary must be Money class")
+#
+#     @property
+#     def experience_year(self):
+#         return self.__experience_year
+#
+#     @experience_year.setter
+#     def experience_year(self, new_exp_year):
+#         if isinstance(new_exp_year, int) and new_exp_year >= 0:
+#             self.__experience_year = new_exp_year
+#         else:
+#             raise JobException("Experience year must be non-negative int")
+#
+#     @property
+#     def position(self):
+#         return self.__position
+#
+#     @position.setter
+#     def position(self, new_position):
+#         if isinstance(new_position, str):
+#             self.__position = new_position
+#         else:
+#             raise JobException("Position must be string")
 
 
 # c1 = Company(company_name="Pepsi", founded_at=Date(1913))

@@ -6,3 +6,9 @@ class DoctorException(Exception):
 
 class PersonException(Exception):
     pass
+
+class MoneyException(Exception):
+    pass
+
+class ProductException(Exception):
+    pass
