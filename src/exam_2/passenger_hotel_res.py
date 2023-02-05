@@ -70,5 +70,4 @@ def book():
     print(pas1.rooms)
 
 
-
 book()
