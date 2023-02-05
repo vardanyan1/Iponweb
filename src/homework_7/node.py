@@ -57,6 +57,7 @@ class Node:
 class RedBlackNode(Node):
     def __init__(self, value: int, left: "RedBlackNode" = None, right: "RedBlackNode" = None, is_red: bool = True):
         super().__init__(value, left, right)
+        self.parent = None
         self.__is_red = is_red
 
     def __repr__(self):
