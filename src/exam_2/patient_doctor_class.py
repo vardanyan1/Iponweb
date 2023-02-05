@@ -92,4 +92,5 @@ def patient_doc():
     print(f"Is registered: {doctor1.is_registered(patient2)}")
     # print(doctor1)
 
+
 patient_doc()
