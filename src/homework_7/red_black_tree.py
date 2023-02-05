@@ -1,15 +1,16 @@
 from node import RedBlackNode
 from my_execptions import RedBlackTreeException
 
+
 class RedBlackTree:
     def __init__(self, head: int = None):
-        if isinstance(head, int) and (head is not None):
+        if head is not None:
             self.__head = RedBlackNode(head, is_red=False)
         else:
             self.__head = None
 
     def __repr__(self):
-        return f"RedBlackTree with head: {self.__head.value if self.__head else None}"
+        return f"Red-Black Tree with root node: {self.__head}"
 
     """
     HEAD getter
@@ -20,99 +21,193 @@ class RedBlackTree:
         return self.__head
 
     def insert(self, new_node: int):
-        if not isinstance(new_node, int):
-            raise RedBlackTreeException("New node must be integer")
-        new_node = RedBlackNode(new_node)
-        self.__head = self.__insertion(current_node=self.__head, new_node=new_node)
+        new_node = RedBlackNode(new_node, is_red=True)
+        parent = None
+        x = self.__head
+        while x is not None:
+            parent = x
+            if new_node.value < x.value:
+                x = x.left
+            else:
+                x = x.right
+        new_node.parent = parent
+        if parent is None:
+            self.__head = new_node
+        elif new_node.value < parent.value:
+            parent.left = new_node
+        else:
+            parent.right = new_node
+        self.__fix_insert(new_node)
+
+    def __fix_insert(self, node: RedBlackNode):
+        while node.parent is not None and node.parent.is_red is True:
+            if node.parent == node.parent.parent.left:
+                uncle = node.parent.parent.right
+                if uncle and uncle.is_red is True:
+                    node.parent.is_red = False
+                    uncle.is_red = False
+                    node.parent.parent.is_red = True
+                    node = node.parent.parent
+                else:
+                    if node == node.parent.right:
+                        node = node.parent
+                        self.__left_rotate(node)
+                    node.parent.is_red = False
+                    node.parent.parent.is_red = True
+                    self.__right_rotate(node.parent.parent)
+            else:
+                uncle = node.parent.parent.left
+                if uncle and uncle.is_red is True:
+                    node.parent.is_red = False
+                    uncle.is_red = False
+                    node.parent.parent.is_red = True
+                    node = node.parent.parent
+                else:
+                    if node == node.parent.left:
+                        node = node.parent
+                        self.__right_rotate(node)
+                    node.parent.is_red = False
+                    node.parent.parent.is_red = True
+                    self.__left_rotate(node.parent.parent)
         self.__head.is_red = False
 
-    def __insertion(self, current_node: RedBlackNode, new_node: RedBlackNode):
-        if current_node is None:
-            return new_node
-        else:
-            if current_node.value == new_node.value:
-                current_node.count += 1
-                return current_node
-            elif new_node.value < current_node.value:
-                current_node.left = self.__insertion(current_node.left, new_node)
-            else:
-                current_node.right = self.__insertion(current_node.right, new_node)
-
-        if current_node.is_red and current_node.right and current_node.right.is_red:
-            current_node = self.__left_rotate(current_node)
-        if current_node.is_red and current_node.left and current_node.left.is_red \
-                and current_node.left.left and current_node.left.left.is_red:
-            current_node = self.__right_rotate(current_node)
-        if current_node.left and current_node.left.is_red and current_node.right and current_node.right.is_red:
-            current_node = self.__color_flip(current_node)
+    def __minimum(self, node: RedBlackNode):
+        current_node = node
+        while current_node.left is not None:
+            current_node = current_node.left
         return current_node
 
     def __left_rotate(self, node: RedBlackNode):
-        x = node.right
-        node.right = x.left
-        x.left = node
-        x.is_red = node.is_red
-        node.is_red = True
-        return x
+        right_child = node.right
+        node.right = right_child.left
+        if right_child.left is not None:
+            right_child.left.parent = node
+        right_child.parent = node.parent
+        if node.parent is None:
+            self.__head = right_child
+        elif node == node.parent.left:
+            node.parent.left = right_child
+        else:
+            node.parent.right = right_child
+        right_child.left = node
+        node.parent = right_child
 
     def __right_rotate(self, node: RedBlackNode):
-        x = node.left
-        node.left = x.right
-        x.right = node
-        x.is_red = node.is_red
-        node.is_red = True
-        return x
+        left_child = node.left
+        node.left = left_child.right
+        if left_child.right is not None:
+            left_child.right.parent = node
+        left_child.parent = node.parent
+        if node.parent is None:
+            self.__head = left_child
+        elif node == node.parent.right:
+            node.parent.right = left_child
+        else:
+            node.parent.left = left_child
+        left_child.right = node
+        node.parent = left_child
 
-    def __color_flip(self, node: RedBlackNode):
-        node.is_red = True
-        node.left.is_red = False
-        node.right.is_red = False
-        return node
+    def __rb_transplant(self, u, v):
+        if u.parent is None:
+            self.__head = v
+        elif u == u.parent.left:
+            u.parent.left = v
+        else:
+            u.parent.right = v
+        if v is not None:
+            v.parent = u.parent
 
     def travers(self):
         return self.__travers(current_node=self.__head, string="Inorder: ")
 
     def __travers(self, current_node: RedBlackNode, string: str):
         if current_node is not None:
-            string = self.__travers(current_node.left, string)
-            string += f"{current_node.value}({current_node.count}) "
-            string = self.__travers(current_node.right, string)
+            string = self.__travers(current_node=current_node.left, string=string)
+            string += str(current_node.value) + " "
+            string = self.__travers(current_node=current_node.right, string=string)
         return string
 
-    def delete(self, value: int):
-        self.__head = self.__delete(self.__head, value)
-        if self.__head:
-            self.__head.is_red = False
+    def __search(self, value: int):
+        current_node = self.__head
+        while current_node is not None and current_node.value != value:
+            if value < current_node.value:
+                current_node = current_node.left
+            else:
+                current_node = current_node.right
+        return current_node
 
-    def __delete(self, node: RedBlackNode, value: int):
-        if node is None:
-            raise RedBlackTreeException("Node not found in the tree")
-        if value < node.value:
-            node.left = self.__delete(node.left, value)
-        elif value > node.value:
-            node.right = self.__delete(node.right, value)
+    def delete(self, value: int):
+        node = self.__search(value)
+        if node is not None:
+            self.__delete(node)
+
+    def __delete(self, node: RedBlackNode):
+        original_color = node.is_red
+        if node.left is None:
+            replacement = node.right
+            self.__rb_transplant(node, node.right)
+        elif node.right is None:
+            replacement = node.left
+            self.__rb_transplant(node, node.left)
         else:
-            if node.count > 1:
-                node.count -= 1
-                return node
-            if node.right is None:
-                return node.left
-            if node.left is None:
-                return node.right
-            min_larger_node = node.right
-            while min_larger_node.left:
-                min_larger_node = min_larger_node.left
-            node.value = min_larger_node.value
-            node.right = self.__delete(node.right, min_larger_node.value)
-        if node.is_red:
-            return node
-        if node.right and node.right.is_red:
-            node = self.__left_rotate(node)
-        if node.left and node.left.is_red and node.left.left and node.left.left.is_red:
-            node = self.__right_rotate(node)
-        if node.left and node.left.is_red and node.right and node.right.is_red:
-            node = self.__color_flip(node)
-        return node
+            minimum_node = self.__minimum(node.right)
+            original_color = minimum_node.is_red
+            replacement = minimum_node.right
+            if minimum_node.parent == node:
+                replacement.parent = minimum_node
+            else:
+                self.__rb_transplant(minimum_node, minimum_node.right)
+                minimum_node.right = node.right
+                minimum_node.right.parent = minimum_node
+            self.__rb_transplant(node, minimum_node)
+            minimum_node.left = node.left
+            minimum_node.left.parent = minimum_node
+            minimum_node.is_red = node.is_red
+        if not original_color:
+            self.__fix_delete(replacement)
+
+    def __fix_delete(self, node: RedBlackNode):
+        while node != self.__head and not node.is_red:
+            if node == node.parent.left:
+                sibling = node.parent.right
+                if sibling.is_red:
+                    sibling.is_red = False
+                    node.parent.is_red = True
+                    self.__left_rotate(node.parent)
+                    sibling = node.parent.right
+                if not sibling.left.is_red and not sibling.right.is_red:
+                    sibling.is_red = True
+                    node = node.parent
+                else:
+                    if not sibling.right.is_red:
+                        sibling.left.is_red = False
+                        sibling.is_red = True
+                        self.__right_rotate(sibling)
+                        sibling = node.parent.right
+                    sibling.is_red = node.parent.is_red
+                    node.parent.is_red = False
+                    sibling.right.is_red = False
+                    self.__left_rotate(node.parent)
+                    node = self.__head
+            else:
+                sibling = node.parent.left
+                if sibling.is_red:
+                    sibling.is_red = False
+                    node.parent.is_red = True
+                    self.__right_rotate(node.parent)
+                    sibling = node.parent.left
+                if not sibling.right.is_red and not sibling.left.is_red:
+                    sibling.is_red = True
+                    node = node.parent
+                else:
+                    if not sibling.left.is_red:
+                        sibling.right.is_red = False
+                        sibling.is_red = True
+                        self.__left_rotate(sibling)
+                        sibling = node.parent.left
+                    sibling.is_red = node.parent.is_red
+                    node.parent.is_red = False
+                    sibling.left.is_red = False
 
 
 tree = RedBlackTree()
@@ -125,16 +220,21 @@ tree.insert(4)
 tree.insert(2)
 tree.insert(10)
 print(tree.travers())
-print(f"head.right: {tree.head}")
+print(f"head: {tree.head}")
 print(f"head.left: {tree.head.left}")
 print(f"head.left.left: {tree.head.left.left}")
-print(f"head.left.left.left: {tree.head.left.left}")
-print()
+print(f"head.left.left.left: {tree.head.left.left.left}")
+print(f"head.left.right: {tree.head.left.right}")
+print(f"head.right: {tree.head.right}")
+
+tree.delete(2)
+print(tree.travers())
+# print()
 # tree.delete(10)
 # tree.delete(210)
 # tree.delete(10)
 # tree.delete(19)
-print(tree.travers())
+# print(tree.travers())
 # tree.delete(20)
 # tree.delete(18)
 # tree.delete(120)
@@ -145,4 +245,4 @@ print(tree.travers())
 # tree.insert(20)
 # tree.insert(10)
 # print(tree.travers())
-print(tree.travers())
+# print(tree.travers())
