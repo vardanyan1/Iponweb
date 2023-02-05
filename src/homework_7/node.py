@@ -1,4 +1,4 @@
-from my_execptions import NodeException
+from my_execptions import NodeException, RedBlackNodeException
 from typing import Union
 
 class Node:
@@ -52,3 +52,22 @@ class Node:
         if not isinstance(new_right, (Node, type(None))):
             raise NodeException(f"Right Node must be Node class, you passed: {new_right}")
         self.__right = new_right
+
+
+class RedBlackNode(Node):
+    def __init__(self, value: int, left: "RedBlackNode" = None, right: "RedBlackNode" = None, is_red: bool = True):
+        super().__init__(value, left, right)
+        self.__is_red = is_red
+
+    def __repr__(self):
+        return f"RedBlackNode with value: {self.value}, color: {'Red' if self.is_red else 'Black'}"
+
+    @property
+    def is_red(self):
+        return self.__is_red
+
+    @is_red.setter
+    def is_red(self, new_is_red):
+        if not isinstance(new_is_red, bool):
+            raise RedBlackNodeException("Node color must be a boolean")
+        self.__is_red = new_is_red
