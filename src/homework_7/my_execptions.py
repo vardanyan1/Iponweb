@@ -6,3 +6,9 @@ class BinarySearchTreeException(Exception):
 
 class MySortingException(Exception):
     pass
+
+class RedBlackTreeException(Exception):
+    pass
+
+class RedBlackNodeException(Exception):
+    pass
