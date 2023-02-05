@@ -87,7 +87,7 @@ def patient_doc():
     doctor1 = Doctor("Karen", "Makunc", 45, 'M', schedule={datetime(2020, 2, 12, 12, 40): patient1})
     doctor1.register_patient(datetime(2020, 2, 13, 12, 40), patient3)
     doctor1.register_patient(datetime(2020, 2, 12, 13, 20), patient2)
-    print(f"Is registered: {doctor1.is_free((datetime(2020, 2, 12, 12, 55)))}")
+    print(f"Is free: {doctor1.is_free((datetime(2020, 2, 12, 12, 55)))}")
     print(doctor1)
     print(f"Is registered: {doctor1.is_registered(patient2)}")
     # print(doctor1)
