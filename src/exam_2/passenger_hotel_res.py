@@ -67,7 +67,8 @@ def book():
     hotel1.reserve_rooms("single", 4)
     print(f"After reservation: {hotel1}")
     pas1.reserve(hotel1, "double", 2)
-    print(pas1.rooms)
+    print(f"{pas1}")
+    print(f"After reservation: {hotel1}")
 
 
 book()
