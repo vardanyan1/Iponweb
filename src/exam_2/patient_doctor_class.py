@@ -48,8 +48,8 @@ class Doctor(Person):
             self.__schedule = {}
 
     def __repr__(self):
-        return f"Doctor {self.name_surname} schedule" \
-               f" {self.__schedule}"
+        schedule_str = '\n'.join([f"{k}: {v.name_surname}" for k, v in self.__schedule.items()])
+        return f"Doctor {self.name_surname} schedule:\n{schedule_str}"
 
     def register_patient(self, datetime_book: datetime, patient: Patient):
         if not isinstance(patient, Patient):
@@ -59,9 +59,6 @@ class Doctor(Person):
 
         if patient in self.__schedule.values():
             raise DoctorException(f"Patient:{patient.name_surname} already registered")
-        # if datetime_book in self.__schedule.keys():
-        #     raise DoctorException(f"Datetime {datetime_book} already taken from"
-        #                           f" {self.__schedule[datetime_book]} patient")
 
         if self.is_free(datetime_book):
             self.__schedule[datetime_book] = patient
@@ -83,12 +80,16 @@ class Doctor(Person):
         return False
 
 
-patient1 = Patient("art", "sar", 19, "M")
-patient2 = Patient("zzz", "fff", 19, "F")
-doctor1 = Doctor("doc", "moc", 45, 'M', schedule={datetime(2020, 2, 12, 12, 40): patient1})
-# doctor1.register_patient(datetime(2020, 2, 12, 12, 40), patient1)
-doctor1.register_patient(datetime(2020, 2, 12, 13, 20), patient2)
-# print(doctor1.is_free((datetime(2020, 2, 12, 12, 55))))
-# print(doctor1)
-print(f"Is registered: {doctor1.is_registered(patient2)}")
-# print(doctor1)
+def patient_doc():
+    patient1 = Patient("Artur", "Sargsyan", 19, "M")
+    patient2 = Patient("Anna", "Margaryan", 19, "F")
+    patient3 = Patient("Ashot", "Margaryan", 22, "M")
+    doctor1 = Doctor("Karen", "Makunc", 45, 'M', schedule={datetime(2020, 2, 12, 12, 40): patient1})
+    doctor1.register_patient(datetime(2020, 2, 13, 12, 40), patient3)
+    doctor1.register_patient(datetime(2020, 2, 12, 13, 20), patient2)
+    # print(doctor1.is_free((datetime(2020, 2, 12, 12, 55))))
+    print(doctor1)
+    print(f"Is registered: {doctor1.is_registered(patient2)}")
+    # print(doctor1)
+
+patient_doc()
