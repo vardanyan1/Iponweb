@@ -103,7 +103,18 @@ class MyBagAdmin(admin.ModelAdmin):
 
 
 class PurchaseAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('buy_time', 'username_ref', 'list_of_items', 'total_price')
+
+    @admin.display(description='Customer')
+    def username_ref(self, obj):
+        link = f"/admin/shop/customer/{obj.id}/change/"
+        return format_html('<b><a href="{}">{}</a></b>', link, obj.customer.user.username)
+
+    @admin.display(description='Items')
+    def list_of_items(self, obj):
+        item_names = [item.name for item in obj.items.all()]
+        item_names_str = ", ".join(item_names)
+        return f"{item_names_str}"
 
 
 admin.site.register(StoreCategory, StoreCategoryAdmin)
