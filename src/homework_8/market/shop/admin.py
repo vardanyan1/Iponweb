@@ -89,6 +89,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 class MyBagAdmin(admin.ModelAdmin):
     list_display = ('username_ref', 'list_of_items', 'total_price')
+    filter_horizontal = ("items",)
 
     @admin.display(description='Customer')
     def username_ref(self, obj):
@@ -103,7 +104,7 @@ class MyBagAdmin(admin.ModelAdmin):
 
 
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display = ('buy_time', 'username_ref', 'list_of_items', 'total_price')
+    list_display = ('id', 'buy_time', 'username_ref', 'list_of_items', 'total_price')
 
     @admin.display(description='Customer')
     def username_ref(self, obj):
