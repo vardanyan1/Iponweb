@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import StoreCategory, ItemsCategory, Customer, StoreOwner, Store, Item
+from .models import StoreCategory, ItemsCategory, Customer, StoreOwner, Store, Item, MyBag, Purchase
 
 
 class StoreCategoryAdmin(admin.ModelAdmin):
@@ -53,6 +53,7 @@ class StoreOwnerAdmin(admin.ModelAdmin):
         if obj.avatar:
             return format_html('<b><a href="{}">...{}</a></b>', obj.avatar.url, obj.avatar.name[-12:])
 
+
 class StoreAdmin(admin.ModelAdmin):
     list_display = ('name', 'store_owner_name', 'store_category_name')
 
@@ -86,9 +87,30 @@ class ItemAdmin(admin.ModelAdmin):
         return format_html('<b><a href="{}">{}</a></b>', link, obj.store.name)
 
 
+class MyBagAdmin(admin.ModelAdmin):
+    list_display = ('username_ref', 'list_of_items', 'total_price')
+
+    @admin.display(description='Customer')
+    def username_ref(self, obj):
+        link = f"/admin/shop/customer/{obj.id}/change/"
+        return format_html('<b><a href="{}">{}</a></b>', link, obj.customer.user.username)
+
+    @admin.display(description='Items')
+    def list_of_items(self, obj):
+        item_names = [item.name for item in obj.items.all()]
+        item_names_str = ", ".join(item_names)
+        return f"{item_names_str}"
+
+
+class PurchaseAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(StoreCategory, StoreCategoryAdmin)
 admin.site.register(ItemsCategory, ItemsCategoryAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(StoreOwner, StoreOwnerAdmin)
 admin.site.register(Store, StoreAdmin)
 admin.site.register(Item, ItemAdmin)
+admin.site.register(MyBag, MyBagAdmin)
+admin.site.register(Purchase, PurchaseAdmin)
