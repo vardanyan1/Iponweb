@@ -94,4 +94,4 @@ class Purchase(models.Model):
     def __str__(self):
         item_names = [item.name for item in self.items.all()]
         item_names_str = ", ".join(item_names)
-        return f"Purchases: {item_names_str}"
+        return f"Purchase: {item_names_str}"
