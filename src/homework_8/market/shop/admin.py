@@ -93,7 +93,7 @@ class MyBagAdmin(admin.ModelAdmin):
 
     @admin.display(description='Customer')
     def username_ref(self, obj):
-        link = f"/admin/shop/customer/{obj.id}/change/"
+        link = f"/admin/shop/customer/{obj.customer.id}/change/"
         return format_html('<b><a href="{}">{}</a></b>', link, obj.customer.user.username)
 
     @admin.display(description='Items')
