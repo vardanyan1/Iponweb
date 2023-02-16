@@ -1,8 +1,14 @@
-from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import StoreCategory, ItemsCategory, Customer, StoreOwner, Store, Item, MyBag, Purchase
+from .models.store_category_model import StoreCategory
+from .models.item_model import ItemsCategory
+from .models.customer_model import Customer
+from .models.store_owner_model import StoreOwner
+from .models.store_model import Store
+from .models.item_model import Item
+from .models.my_bag_model import MyBag
+from .models.purchase_model import Purchase
 
 
 class StoreCategoryAdmin(admin.ModelAdmin):

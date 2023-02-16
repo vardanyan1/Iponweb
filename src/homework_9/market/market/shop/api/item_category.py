@@ -2,11 +2,10 @@ import json
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-# from django.views.decorators.csrf import csrf_exempt
 
 from ..tools.sending_tools import data_status, ok_status
 from django.views.generic import View
-from ..models import ItemsCategory
+from ..models.items_category_model import ItemsCategory
 
 
 class ItemsCategoryView(View):
@@ -20,7 +19,6 @@ class ItemsCategoryView(View):
         return data_status(data=data)
 
     @staticmethod
-    # @csrf_exempt
     def post(request):
         data = json.loads(request.body)
         category = ItemsCategory.objects.create(
