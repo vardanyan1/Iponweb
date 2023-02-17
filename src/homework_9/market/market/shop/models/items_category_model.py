@@ -1,5 +1,5 @@
 from django.db import models
-from ..tools.image_preproc_tools import handle_uploaded_file
+from ...tools.image_preproc_tools import handle_uploaded_file
 
 
 class ItemsCategory(models.Model):

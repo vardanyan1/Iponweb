@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 from ..tools.sending_tools import data_status, ok_status
 from django.views.generic import View
-from ..models.items_category_model import ItemsCategory
+from ..shop.models.items_category_model import ItemsCategory
 
 
 class ItemsCategoryView(View):
@@ -65,6 +65,3 @@ class ItemsCategoryView(View):
             category.name = data['name']
         category.save()
         return ok_status()
-
-
-

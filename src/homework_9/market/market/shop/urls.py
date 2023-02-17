@@ -1,6 +1,5 @@
 from django.urls import path
-from .api.item_category import ItemsCategoryView
-
+from ..api.items_category_api import ItemsCategoryView
 
 urlpatterns = [
     path('item_category', ItemsCategoryView.as_view()),
