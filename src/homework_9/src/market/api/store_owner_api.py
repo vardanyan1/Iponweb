@@ -46,7 +46,7 @@ class StoreOwnerView(View):
         try:
             owner = StoreOwner.objects.get(id=id)
         except ObjectDoesNotExist:
-            return JsonResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "owner_not_found"})
         return data_status(owner_serializer(owner))
 
     @staticmethod
@@ -54,7 +54,7 @@ class StoreOwnerView(View):
         try:
             owner = StoreOwner.objects.get(id=id)
         except ObjectDoesNotExist:
-            return JsonResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "owner_not_found"})
 
         owner.delete()
         return ok_status()
@@ -65,7 +65,7 @@ class StoreOwnerView(View):
         try:
             owner = StoreOwner.objects.get(id=id)
         except ObjectDoesNotExist:
-            return JsonResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "owner_not_found"})
 
         if "user" in data:
             user_id = data['user']
@@ -75,7 +75,6 @@ class StoreOwnerView(View):
                 return JsonResponse({"status": "user_not_found"})
 
             owner.user = user
-
             owner.save()
 
         return ok_status()
