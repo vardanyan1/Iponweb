@@ -92,11 +92,11 @@ class StoreView(View):
         if "store_category" in data:
             store_category_id = data["store_category"]
             try:
-                new_category = StoreCategory.objects.get(id=store_category_id)
+                category = StoreCategory.objects.get(id=store_category_id)
             except ObjectDoesNotExist:
                 return JsonResponse({"status": "category_not_found"})
 
-            store.store_category = new_category
+            store.store_category = category
 
         store.save()
         return ok_status()
