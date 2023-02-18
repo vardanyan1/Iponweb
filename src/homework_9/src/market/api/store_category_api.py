@@ -3,7 +3,7 @@ from django.views.generic import View
 from ..shop.models.store_category_model import StoreCategory
 from ..tools.sending_tools import data_status, ok_status
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 
 class StoreCategoryView(View):
@@ -39,7 +39,7 @@ class StoreCategoryView(View):
         try:
             category = StoreCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return HttpResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "obj_not_found"})
         return data_status({"id": category.id, "name": category.name})
 
     @staticmethod
@@ -47,7 +47,7 @@ class StoreCategoryView(View):
         try:
             category = StoreCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return HttpResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "obj_not_found"})
 
         category.delete()
         return ok_status()
@@ -58,7 +58,7 @@ class StoreCategoryView(View):
         try:
             category = StoreCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return HttpResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "obj_not_found"})
         if "name" in data:
             category.name = data['name']
         category.save()

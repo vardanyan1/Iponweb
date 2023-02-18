@@ -52,7 +52,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 
 class StoreOwnerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'avatar_name', 'registered_at')
+    list_display = ('id', 'user', 'avatar_name', 'registered_at')
 
     @admin.display(description='Avatar')
     def avatar_name(self, obj):

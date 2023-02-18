@@ -1,9 +1,8 @@
-from market.market.shop.models import StoreCategory  # noqa
-from market.market.shop.models import ItemsCategory  # noqa
-from market.market.shop.models import Item  # noqa
-from market.market.shop.models import Store  # noqa
-from market.market.shop.models import StoreOwner  # noqa
-from market.market.shop.models import Customer  # noqa
-from market.market.shop.models import MyBag  # noqa
-from market.market.shop.models import Purchase  # noqa
-
+from .models import StoreCategory  # noqa
+from .models import ItemsCategory  # noqa
+from .models import Item  # noqa
+from .models import Store  # noqa
+from .models import StoreOwner  # noqa
+from .models import Customer  # noqa
+from .models import MyBag  # noqa
+from .models import Purchase  # noqa
