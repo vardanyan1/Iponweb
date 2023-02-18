@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 from ..shop.models.store_owner_model import StoreOwner
 from ..tools.sending_tools import data_status, ok_status
-from ..serializers.owner_serializer import owner_serializer
+from ..serializers.store_owner_serializer import owner_serializer
 
 
 class StoreOwnerView(View):
