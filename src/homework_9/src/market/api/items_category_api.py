@@ -4,6 +4,7 @@ from django.views.generic import View
 from django.core.exceptions import ObjectDoesNotExist
 from ..tools.sending_tools import data_status, ok_status
 from ..shop.models.items_category_model import ItemsCategory
+from ..serializers.item_category_serializer import item_category_serializer
 
 
 class ItemsCategoryView(View):
@@ -12,7 +13,7 @@ class ItemsCategoryView(View):
         categories = ItemsCategory.objects.all()
         data = []
         for category in categories:
-            data.append({"name": category.name, "id": category.id})
+            data.append(item_category_serializer(category))
 
         return data_status(data=data)
 
@@ -40,7 +41,7 @@ class ItemsCategoryView(View):
             category = ItemsCategory.objects.get(id=id)
         except ObjectDoesNotExist:
             return HttpResponse({"status": "obj_not_found"})
-        return data_status({"id": category.id, "name": category.name})
+        return data_status(item_category_serializer(category))
 
     @staticmethod
     def delete(request, id):
