@@ -1,10 +1,8 @@
 import json
-
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-
-from ..tools.sending_tools import data_status, ok_status
 from django.views.generic import View
+from django.core.exceptions import ObjectDoesNotExist
+from ..tools.sending_tools import data_status, ok_status
 from ..shop.models.items_category_model import ItemsCategory
 
 

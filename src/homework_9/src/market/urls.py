@@ -18,10 +18,17 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from .api.items_category_api import ItemsCategoryView
+from .api.store_category_api import StoreCategoryView
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('api/', include('market.shop.urls'))
+                  # path('api/', include('market.shop.urls')),
+                  path('api/items_category', ItemsCategoryView.as_view()),
+                  path("api/items_category/<int:id>", ItemsCategoryView.check_view),
+                  path('api/store_category', StoreCategoryView.as_view()),
+                  path("api/store_category/<int:id>", StoreCategoryView.check_view),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

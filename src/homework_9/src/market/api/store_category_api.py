@@ -1,6 +1,9 @@
+import json
 from django.views.generic import View
-from market.market.shop.models.store_category_model import StoreCategory
-from market.market.tools.sending_tools import data_status
+from ..shop.models.store_category_model import StoreCategory
+from ..tools.sending_tools import data_status, ok_status
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 
 
 class StoreCategoryView(View):
@@ -12,3 +15,51 @@ class StoreCategoryView(View):
             data.append({"name": category.name, "id": category.id})
 
         return data_status(data=data)
+
+    @staticmethod
+    def post(request):
+        data = json.loads(request.body)
+        category = StoreCategory.objects.create(
+            name=data['name']
+        )
+        category.save()
+        return ok_status()
+
+    @staticmethod
+    def check_view(request, id):
+        if request.method == "GET":
+            return StoreCategoryView.get_single(request, id)
+        if request.method == "DELETE":
+            return StoreCategoryView.delete(request, id)
+        if request.method == "PATCH":
+            return StoreCategoryView.edit(request, id)
+
+    @staticmethod
+    def get_single(request, id):
+        try:
+            category = StoreCategory.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return HttpResponse({"status": "obj_not_found"})
+        return data_status({"id": category.id, "name": category.name})
+
+    @staticmethod
+    def delete(request, id):
+        try:
+            category = StoreCategory.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return HttpResponse({"status": "obj_not_found"})
+
+        category.delete()
+        return ok_status()
+
+    @staticmethod
+    def edit(request, id):
+        data = json.loads(request.body)
+        try:
+            category = StoreCategory.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return HttpResponse({"status": "obj_not_found"})
+        if "name" in data:
+            category.name = data['name']
+        category.save()
+        return ok_status()
