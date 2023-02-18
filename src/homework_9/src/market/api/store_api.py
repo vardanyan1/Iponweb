@@ -1,8 +1,7 @@
 import json
 from django.views.generic import View
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import User
 from ..shop.models.store_model import Store
 from ..shop.models.store_owner_model import StoreOwner
 from ..shop.models.store_category_model import StoreCategory
@@ -24,16 +23,15 @@ class StoreView(View):
     def post(request):
         data = json.loads(request.body)
         name = data['name']
-        owner_name = data['owner']
+        owner_id = data['owner']
         try:
-            user = User.objects.get(username=owner_name)
-            owner = StoreOwner.objects.get(user=user)
+            owner = StoreOwner.objects.get(id=owner_id)
         except ObjectDoesNotExist:
             return JsonResponse({"status": "owner_not_found"})
 
-        category_name = data['store_category']
+        category_id = data['store_category']
         try:
-            store_category = StoreCategory.objects.get(name=category_name)
+            store_category = StoreCategory.objects.get(id=category_id)
         except ObjectDoesNotExist:
             return JsonResponse({"status": "category_not_found"})
 
@@ -72,47 +70,33 @@ class StoreView(View):
     @staticmethod
     def edit(request, id):
         data = json.loads(request.body)
+
+        try:
+            store = Store.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return JsonResponse({"status": "store_not_found"})
+
         if "name" in data:
             name = data['name']
-            try:
-                store = Store.objects.get(id=id)
-            except ObjectDoesNotExist:
-                return JsonResponse({"status": "store_not_found"})
             store.name = name
-            store.save()
 
         if "owner" in data:
-            new_owner_name = data['owner']
+            owner_id = data['owner']
             try:
-                new_owner_user = User.objects.get(username=new_owner_name)
+                owner = StoreOwner.objects.get(id=owner_id)
             except ObjectDoesNotExist:
-                return JsonResponse({"status": "new_user_not_found"})
+                return JsonResponse({"status": "owner_not_found"})
 
-            try:
-                new_owner = StoreOwner.objects.get(user=new_owner_user)
-            except ObjectDoesNotExist:
-                return JsonResponse({"status": "new_owner_not_found"})
-
-            try:
-                store = Store.objects.get(id=id)
-            except ObjectDoesNotExist:
-                return JsonResponse({"status": "store_not_found"})
-
-            store.owner = new_owner
-            store.save()
+            store.owner = owner
 
         if "store_category" in data:
-            store_category = data["store_category"]
-
+            store_category_id = data["store_category"]
             try:
-                store = Store.objects.get(id=id)
+                new_category = StoreCategory.objects.get(id=store_category_id)
             except ObjectDoesNotExist:
-                return JsonResponse({"status": "store_not_found"})
+                return JsonResponse({"status": "category_not_found"})
 
-            try:
-                new_category = StoreCategory.objects.get(name=store_category)
-            except ObjectDoesNotExist:
-                return JsonResponse({"status": "store_not_found"})
             store.store_category = new_category
-            store.save()
+
+        store.save()
         return ok_status()
