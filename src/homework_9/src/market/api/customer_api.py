@@ -22,10 +22,9 @@ class CustomerView(View):
     @staticmethod
     def post(request):
         data = json.loads(request.body)
-        username = data['user']
-
+        user_id = data['user']
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(id=user_id)
         except ObjectDoesNotExist:
             return JsonResponse({"status": "user_not_found"})
 
@@ -64,21 +63,19 @@ class CustomerView(View):
     @staticmethod
     def edit(request, id):
         data = json.loads(request.body)
+        try:
+            customer = Customer.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return JsonResponse({"status": "customer_not_found"})
 
         if "user" in data:
-            new_user_name = data['user']
-
+            user_id = data['user']
             try:
-                customer = Customer.objects.get(id=id)
+                user = User.objects.get(username=user_id)
             except ObjectDoesNotExist:
-                return JsonResponse({"status": "customer_not_found"})
+                return JsonResponse({"status": "user_not_found"})
 
-            try:
-                new_user = User.objects.get(username=new_user_name)
-            except ObjectDoesNotExist:
-                return JsonResponse({"status": "new_user_not_found"})
-
-            customer.user = new_user
+            customer.user = user
             customer.save()
 
         return ok_status()
