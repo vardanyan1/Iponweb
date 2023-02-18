@@ -23,6 +23,7 @@ from .api.store_category_api import StoreCategoryView
 from .api.store_owner_api import StoreOwnerView
 from .api.store_api import StoreView
 from .api.customer_api import CustomerView
+from .api.item_api import ItemView
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
@@ -36,6 +37,8 @@ urlpatterns = [
                   path('api/store/<int:id>', StoreView.check_view),
                   path('api/customer', CustomerView.as_view()),
                   path('api/customer/<int:id>', CustomerView.check_view),
+                  path('api/item', ItemView.as_view()),
+                  path('api/item/<int:id>', ItemView.check_view),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
