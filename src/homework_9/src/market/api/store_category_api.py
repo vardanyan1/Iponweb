@@ -4,6 +4,7 @@ from ..shop.models.store_category_model import StoreCategory
 from ..tools.sending_tools import data_status, ok_status
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
+from ..serializers.store_category_serializer import store_category_serializer
 
 
 class StoreCategoryView(View):
@@ -12,7 +13,7 @@ class StoreCategoryView(View):
         categories = StoreCategory.objects.all()
         data = []
         for category in categories:
-            data.append({"name": category.name, "id": category.id})
+            data.append(store_category_serializer(category))
 
         return data_status(data=data)
 
