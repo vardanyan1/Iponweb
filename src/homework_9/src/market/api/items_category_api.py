@@ -40,7 +40,7 @@ class ItemsCategoryView(View):
         try:
             category = ItemsCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return HttpResponse({"status": "obj_not_found"})
+            return HttpResponse({"status": "category_not_found"})
         return data_status(item_category_serializer(category))
 
     @staticmethod
@@ -48,7 +48,7 @@ class ItemsCategoryView(View):
         try:
             category = ItemsCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return HttpResponse({"status": "obj_not_found"})
+            return HttpResponse({"status": "category_not_found"})
 
         category.delete()
         return ok_status()
@@ -59,7 +59,7 @@ class ItemsCategoryView(View):
         try:
             category = ItemsCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return HttpResponse({"status": "obj_not_found"})
+            return HttpResponse({"status": "category_not_found"})
         if "name" in data:
             category.name = data['name']
         category.save()
