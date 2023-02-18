@@ -40,7 +40,7 @@ class StoreCategoryView(View):
         try:
             category = StoreCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return JsonResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "category_not_found"})
         return data_status({"id": category.id, "name": category.name})
 
     @staticmethod
@@ -48,7 +48,7 @@ class StoreCategoryView(View):
         try:
             category = StoreCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return JsonResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "category_not_found"})
 
         category.delete()
         return ok_status()
@@ -59,7 +59,7 @@ class StoreCategoryView(View):
         try:
             category = StoreCategory.objects.get(id=id)
         except ObjectDoesNotExist:
-            return JsonResponse({"status": "obj_not_found"})
+            return JsonResponse({"status": "category_not_found"})
         if "name" in data:
             category.name = data['name']
         category.save()
