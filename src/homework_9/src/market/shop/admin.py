@@ -30,7 +30,7 @@ class ItemsCategoryAdmin(admin.ModelAdmin):
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('username_ref', 'name', 'surname', 'avatar_name', 'registered_at')
+    list_display = ("id", 'username_ref', 'name', 'surname', 'avatar_name', 'registered_at')
 
     @admin.display(description='Avatar')
     def avatar_name(self, obj):
