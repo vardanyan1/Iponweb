@@ -94,7 +94,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class MyBagAdmin(admin.ModelAdmin):
-    list_display = ('username_ref', 'list_of_items', 'total_price')
+    list_display = ('id', 'username_ref', 'list_of_items', 'total_price')
     filter_horizontal = ("items",)
 
     @admin.display(description='Customer')
