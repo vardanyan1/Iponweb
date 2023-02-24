@@ -14,38 +14,41 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from .api.items_category_api import ItemsCategoryView
-from .api.store_category_api import StoreCategoryView
-from .api.store_owner_api import StoreOwnerView
-from .api.store_api import StoreView
-from .api.customer_api import CustomerView
-from .api.item_api import ItemView
-from .api.my_bag_api import MyBagView
-from .api.purchase_api import PurchaseView
+
+
+from rest_framework.routers import SimpleRouter
+from .api.customer_api import CustomerViewSet
+from .api.items_category_api import ItemCategoryViewSet
+from .api.item_api import ItemViewSet
+from .api.store_category_api import StoreCategoryViewSet
+from .api.store_owner_api import StoreOwnerViewSet
+from .api.store_api import StoreViewSet
+from .api.my_bag_api import MyBagViewSet
+from .api.purchase_api import PurchaseViewSet
+
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('api/items_category', ItemsCategoryView.as_view()),
-                  path("api/items_category/<int:id>", ItemsCategoryView.check_view),
-                  path('api/store_category', StoreCategoryView.as_view()),
-                  path("api/store_category/<int:id>", StoreCategoryView.check_view),
-                  path('api/store_owner', StoreOwnerView.as_view()),
-                  path('api/store_owner/<int:id>', StoreOwnerView.check_view),
-                  path('api/store', StoreView.as_view()),
-                  path('api/store/<int:id>', StoreView.check_view),
-                  path('api/customer', CustomerView.as_view()),
-                  path('api/customer/<int:id>', CustomerView.check_view),
-                  path('api/item', ItemView.as_view()),
-                  path('api/item/<int:id>', ItemView.check_view),
-                  path('api/my_bag', MyBagView.as_view()),
-                  path('api/my_bag/<int:id>', MyBagView.check_view),
-                  path('api/purchase', PurchaseView.as_view()),
-                  path('api/purchase/<int:id>', PurchaseView.check_view),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+router = SimpleRouter()
+router.register("api/customer", CustomerViewSet, "customer")
+router.register("api/item_category", ItemCategoryViewSet, "item_category")
+router.register("api/store_category", StoreCategoryViewSet, "store_category")
+router.register("api/store_owner", StoreOwnerViewSet, "store_owner")
+router.register("api/item", ItemViewSet, "item")
+router.register("api/store", StoreViewSet, "store")
+router.register("api/my_bag", MyBagViewSet, "my_bag")
+router.register("api/purchase", PurchaseViewSet, "purchase")
+
+
+urlpatterns += router.urls
+
 urlpatterns += staticfiles_urlpatterns()
+
+
