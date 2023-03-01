@@ -54,8 +54,8 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    category = ItemCategorySerializer(many=False)
-    store = StoreSerializer(many=False)
+    category = serializers.PrimaryKeyRelatedField(queryset=ItemsCategory.objects.all())
+    store = serializers.PrimaryKeyRelatedField(queryset=Store.objects.all())
 
     class Meta:
         fields = ("id", "name", "picture", "category", "price", "quantity", "info", "store")
