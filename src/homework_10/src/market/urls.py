@@ -19,19 +19,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-
 from rest_framework.routers import SimpleRouter
 from .api.customer_api import CustomerViewSet
 from .api.items_category_api import ItemCategoryViewSet
 from .api.item_api import ItemViewSet
+from .api.registration_api import RegistrationView
 from .api.store_category_api import StoreCategoryViewSet
 from .api.store_owner_api import StoreOwnerViewSet
 from .api.store_api import StoreViewSet
 from .api.my_bag_api import MyBagViewSet
 from .api.purchase_api import PurchaseViewSet
 
-
 urlpatterns = [
+
+                  path('api/auth/login/', RegistrationView.login, name='login'),
+                  path('api/auth/register/', RegistrationView.register, name='register'),
+                  path('api/auth/logout/', RegistrationView.logout, name='logout'),
+                  path('api/auth/refresh-token/', RegistrationView.refresh_token, name='refresh_token'),
                   path('admin/', admin.site.urls),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -46,9 +50,6 @@ router.register("api/store", StoreViewSet, "store")
 router.register("api/my_bag", MyBagViewSet, "my_bag")
 router.register("api/purchase", PurchaseViewSet, "purchase")
 
-
 urlpatterns += router.urls
 
 urlpatterns += staticfiles_urlpatterns()
-
-
