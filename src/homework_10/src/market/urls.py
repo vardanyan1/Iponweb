@@ -36,6 +36,9 @@ urlpatterns = [
                   path('api/auth/register/', RegistrationView.register, name='register'),
                   path('api/auth/logout/', RegistrationView.logout, name='logout'),
                   path('api/auth/refresh-token/', RegistrationView.refresh_token, name='refresh_token'),
+                  path('api/auth/send_verification_code/<int:user_id>/', RegistrationView.send_verification_code,
+                       name='send_verification_code'),
+                  path('api/auth/verify/', RegistrationView.verify, name='verify_user'),
                   path('admin/', admin.site.urls),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,6 +9,7 @@ from .models.store_model import Store
 from .models.item_model import Item
 from .models.my_bag_model import MyBag
 from .models.purchase_model import Purchase
+from .models.user_verification_model import UserVerification
 
 
 class StoreCategoryAdmin(admin.ModelAdmin):
@@ -124,6 +125,10 @@ class PurchaseAdmin(admin.ModelAdmin):
         return f"{item_names_str}"
 
 
+class UserVerificationAdmin(admin.ModelAdmin):
+    list_display = ("id", 'user', 'verification_code')
+
+
 admin.site.register(StoreCategory, StoreCategoryAdmin)
 admin.site.register(ItemsCategory, ItemsCategoryAdmin)
 admin.site.register(Customer, CustomerAdmin)
@@ -132,3 +137,4 @@ admin.site.register(Store, StoreAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(MyBag, MyBagAdmin)
 admin.site.register(Purchase, PurchaseAdmin)
+admin.site.register(UserVerification, UserVerificationAdmin)
