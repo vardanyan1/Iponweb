@@ -28,10 +28,11 @@ class RegistrationView(View):
 
         user = authenticate(username=email, password=password)
 
-        if not user.is_active:
-            return HttpResponse("User not verified", status=400)
-
         if user:
+
+            if not user.is_active:
+                return HttpResponse("User not verified", status=400)
+
             login(request, user)
             jwt_token = generate_jwt(user)
             refresh_jwt_token = generate_jwt(user, True)
