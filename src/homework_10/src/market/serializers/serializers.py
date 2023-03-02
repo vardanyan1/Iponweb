@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from ..shop.models.customer_model import Customer
 from ..shop.models.items_category_model import ItemsCategory
 from ..shop.models.item_model import Item
@@ -17,11 +18,22 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         fields = ("id", "user", "avatar", "registered_at")
         model = Customer
+        read_only_fields = ("registered_at",)
+
+    def to_representation(self, instance):
+        user = instance.user
+
+        user_data = UserSerializer(user).data
+
+        representation = super().to_representation(instance)
+        representation['user'] = user_data
+
+        return representation
 
 
 class ItemCategorySerializer(serializers.ModelSerializer):
@@ -37,16 +49,26 @@ class StoreCategorySerializer(serializers.ModelSerializer):
 
 
 class StoreOwnerSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False)
+    user = user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         fields = ("id", "user", "avatar", "registered_at")
         model = StoreOwner
 
+    def to_representation(self, instance):
+        user = instance.user
+
+        user_data = UserSerializer(user).data
+
+        representation = super().to_representation(instance)
+        representation['user'] = user_data
+
+        return representation
+
 
 class StoreSerializer(serializers.ModelSerializer):
-    owner = StoreOwnerSerializer(many=False)
-    store_category = StoreCategorySerializer(many=False)
+    owner = serializers.PrimaryKeyRelatedField(queryset=StoreOwner.objects.all())
+    store_category = serializers.PrimaryKeyRelatedField(queryset=StoreCategory.objects.all())
 
     class Meta:
         fields = ("id", "name", "owner", "store_category")
@@ -63,18 +85,44 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class MyBagSerializer(serializers.ModelSerializer):
-    customer = CustomerSerializer(many=False)
-    items = ItemSerializer(many=True)
+    customer = serializers.PrimaryKeyRelatedField(read_only=True)
+    items = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all(), many=True)
 
     class Meta:
-        fields = ("id", "customer", "items", "total_price")
         model = MyBag
+        fields = ("id", "customer", "items", "total_price")
+
+    def to_representation(self, instance):
+        customer = instance.customer
+        items = instance.items.all()
+
+        customer_data = CustomerSerializer(customer).data
+        item_data = ItemSerializer(items, many=True).data
+
+        representation = super().to_representation(instance)
+        representation['customer'] = customer_data
+        representation['items'] = item_data
+
+        return representation
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
-    customer = CustomerSerializer(many=False)
-    items = ItemSerializer(many=True)
+    customer = serializers.PrimaryKeyRelatedField(read_only=True)
+    items = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all(), many=True)
 
     class Meta:
         fields = ("id", "items", "buy_time", "customer", "total_price")
         model = Purchase
+
+    def to_representation(self, instance):
+        customer = instance.customer
+        items = instance.items.all()
+
+        customer_data = CustomerSerializer(customer).data
+        item_data = ItemSerializer(items, many=True).data
+
+        representation = super().to_representation(instance)
+        representation['customer'] = customer_data
+        representation['items'] = item_data
+
+        return representation
