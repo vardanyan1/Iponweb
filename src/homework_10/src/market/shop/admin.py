@@ -109,8 +109,17 @@ class MyBagAdmin(admin.ModelAdmin):
         item_names_str = ", ".join(item_names)
         return f"{item_names_str}"
 
+    def save_model(self, request, obj, form, change):
+        # Calculate and save the total price
+        items = form.cleaned_data['items']
+        total_price = sum([item.price for item in items])
+        obj.total_price = total_price
+
+        super().save_model(request, obj, form, change)
+
 
 class PurchaseAdmin(admin.ModelAdmin):
+    filter_horizontal = ('items',)
     list_display = ('id', 'buy_time', 'username_ref', 'list_of_items', 'total_price')
 
     @admin.display(description='Customer')
@@ -123,6 +132,14 @@ class PurchaseAdmin(admin.ModelAdmin):
         item_names = [item.name for item in obj.items.all()]
         item_names_str = ", ".join(item_names)
         return f"{item_names_str}"
+
+    def save_model(self, request, obj, form, change):
+        # Calculate and save the total price
+        items = form.cleaned_data['items']
+        total_price = sum([item.price for item in items])
+        obj.total_price = total_price
+
+        super().save_model(request, obj, form, change)
 
 
 class UserVerificationAdmin(admin.ModelAdmin):
