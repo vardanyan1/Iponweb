@@ -17,21 +17,18 @@ class RegistrationView(View):
 
     @staticmethod
     def login(request):
-        data = json.loads(request.body.decode("utf-8"))
+        data = json.loads(request.body)
 
         try:
             email = data["email"]
             password = data["password"]
+            print(password)
 
         except KeyError:
             return HttpResponse("no data")
 
         user = authenticate(username=email, password=password)
-
         if user:
-
-            if not user.is_active:
-                return HttpResponse("User not verified", status=400)
 
             login(request, user)
             jwt_token = generate_jwt(user)
@@ -44,6 +41,9 @@ class RegistrationView(View):
                 user = User.objects.get(username=email)
             except ObjectDoesNotExist:
                 return HttpResponse("invalid login credentials")
+
+            if not user.is_active:
+                return HttpResponse("User not verified", status=400)
             return HttpResponse(f"{user} wrong password")
 
     @staticmethod
@@ -82,10 +82,10 @@ class RegistrationView(View):
             last_name = data["last_name"]
 
         except ValueError:
-            return JsonResponse(json.dumps(({"no_data"})))
+            return JsonResponse({"message": "no_data"})
 
         if User.objects.filter(username=email).exists():
-            return JsonResponse(json.dumps(({"already_exist"})))
+            return JsonResponse({"message": "already_exist"})
 
         user = User.objects.create_user(username=email, password=password)
         user.first_name = first_name
