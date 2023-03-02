@@ -6,7 +6,7 @@ from .item_model import Item
 class MyBag(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     items = models.ManyToManyField(Item)
-    total_price = models.DecimalField(max_digits=12, decimal_places=2)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         item_names = [item.name for item in self.items.all()]
