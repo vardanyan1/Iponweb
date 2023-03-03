@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 
 from ..tools.jwt_tools import generate_jwt
 from ..shop.models.user_verification_model import UserVerification
+from ..shop.models.customer_model import Customer
+from ..shop.models.store_owner_model import StoreOwner
 
 
 class RegistrationView(View):
@@ -77,6 +79,7 @@ class RegistrationView(View):
             email = data["email"]
             first_name = data["first_name"]
             last_name = data["last_name"]
+            is_owner = data["is_owner"]
 
         except ValueError:
             return JsonResponse({"message": "no_data"})
@@ -93,11 +96,14 @@ class RegistrationView(View):
         # create UserVerification object and generate verification code
         verification = UserVerification(user=user)
         verification.generate_verification_code()
-
-        # send verification email
         verification.send_verification_email()
 
-        return JsonResponse({"message": "user created"})
+        if not is_owner:
+            Customer.objects.create(user=user)
+            return JsonResponse({"message": "Customer created"})
+        else:
+            StoreOwner.objects.create(user=user)
+            return JsonResponse({"message": "Store Owner created"})
 
     @staticmethod
     def logout(request):
