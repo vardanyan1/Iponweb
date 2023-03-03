@@ -3,13 +3,13 @@ from datetime import datetime
 
 import jwt
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 
 from ..tools.jwt_tools import generate_jwt
-from ..tools.sending_tools import data_status, ok_status
 from ..shop.models.user_verification_model import UserVerification
 
 
@@ -25,7 +25,7 @@ class RegistrationView(View):
             print(password)
 
         except KeyError:
-            return HttpResponse("no data")
+            return HttpResponseBadRequest("no data")
 
         user = authenticate(username=email, password=password)
         if user:
@@ -37,14 +37,11 @@ class RegistrationView(View):
                                      "refresh_token": refresh_jwt_token})
             return response
         else:
-            try:
-                user = User.objects.get(username=email)
-            except ObjectDoesNotExist:
-                return HttpResponse("invalid login credentials")
+            user = get_object_or_404(User, username=email)
 
             if not user.is_active:
-                return HttpResponse("User not verified", status=400)
-            return HttpResponse(f"{user} wrong password")
+                return HttpResponseBadRequest("User not verified")
+            return HttpResponseBadRequest(f"{user} wrong password")
 
     @staticmethod
     def refresh_token(request):
@@ -52,7 +49,7 @@ class RegistrationView(View):
         try:
             refresh_token = data["refresh_token"]
         except KeyError:
-            return HttpResponse("no data")
+            return HttpResponseBadRequest("no data")
 
         try:
             jwt_payload = jwt.decode(refresh_token, "SECRET_KEY", algorithms=["HS256"])
@@ -62,7 +59,7 @@ class RegistrationView(View):
             # Check if the refresh token has expired
             refresh_token_exp = datetime.strptime(jwt_payload["expiration"], '%Y-%m-%d %H:%M:%S.%f')
             if datetime.utcnow() > refresh_token_exp:
-                return HttpResponse("refresh token expired")
+                return HttpResponseBadRequest("refresh token expired")
 
             # Issue a new access token
             jwt_token = generate_jwt(user)
@@ -70,7 +67,7 @@ class RegistrationView(View):
             return JsonResponse({"access_token": jwt_token.decode("utf-8")})
 
         except jwt.exceptions.DecodeError:
-            return HttpResponse("invalid token")
+            return HttpResponseBadRequest("invalid token")
 
     @staticmethod
     def register(request):
@@ -109,10 +106,7 @@ class RegistrationView(View):
 
     @staticmethod
     def send_verification_code(request, user_id):
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return HttpResponse("User not found", status=404)
+        user = get_object_or_404(User, id=user_id)
 
         verification = UserVerification(user=user)
         verification_code = verification.generate_verification_code()
