@@ -123,13 +123,24 @@ class RegistrationView(View):
         if not email or not verification_code:
             return HttpResponse("Invalid verification link", status=400)
 
+        # Verify the user's email address.
         try:
             user = User.objects.get(username=email)
+            verification = UserVerification.objects.filter(user=user, verification_code=verification_code).first()
+            if verification:
+                user.is_active = True
+                user.save()
+                return JsonResponse({"message": "User verified successfully"})
+        except User.DoesNotExist:
+            pass
+
+        # Change the user's email address.
+        try:
+            old_email = request.GET.get('old_email')
+            user = User.objects.get(username=old_email)
             verification = UserVerification.objects.get(user=user, verification_code=verification_code)
+            user.username = email
+            user.save()
+            return JsonResponse({"message": "User email changed"})
         except (User.DoesNotExist, UserVerification.DoesNotExist):
             return HttpResponse("Invalid verification code", status=400)
-
-        user.is_active = True
-        user.save()
-
-        return JsonResponse({"message": "User verified successfully"})
