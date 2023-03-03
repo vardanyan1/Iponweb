@@ -6,40 +6,43 @@ from rest_framework.response import Response
 
 from ..shop.models.customer_model import Customer
 from ..serializers.serializers import CustomerSerializer
+from ..shop.models.user_verification_model import UserVerification
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    allowed_fields = ['first_name', 'last_name', 'email']  # allowed fields to update
 
     def partial_update(self, request, *args, **kwargs):
-        allowed_fields = ['first_name', 'last_name', 'email']  # allowed fields to update
-
-        if set(request.data.keys()) - set(allowed_fields):
-            raise MethodNotAllowed('PATCH', 'Invalid fields')
+        invalid_fields = set(request.data.keys()) - set(self.allowed_fields)
+        if invalid_fields:
+            raise MethodNotAllowed('PATCH', f"Invalid fields: {', '.join(invalid_fields)}")
 
         instance = self.get_object()
-
         user = instance.user
-        for field in allowed_fields:
+
+        for field in self.allowed_fields:
             if field in request.data:
                 if field == "email":
-                    email = request.data[field]
-                    # Check if the email already exists in the User model
-                    if User.objects.filter(username=email).exists():
-                        raise NotAcceptable({'email': 'This email is already taken.'})
-
-                    # Check if the new email is the same as the current email
-                    if email == instance.user.username:
-                        return Response(self.get_serializer(instance).data)
-
-                    instance.user.username = email
+                    self.update_email(instance, request.data[field])
                 else:
                     setattr(user, field, request.data[field])
-        user.save()
 
+        user.save()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
         return Response(serializer.data)
+
+    def update_email(self, instance, email):
+        if email == instance.user.username:
+            return
+
+        if User.objects.filter(username=email).exists():
+            raise NotAcceptable({'email': 'This email is already taken.'})
+
+        verification = UserVerification.objects.get(user=instance.user)
+        verification.generate_verification_code()
+        verification.send_verification_email(new_email=email)
