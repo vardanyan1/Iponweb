@@ -26,17 +26,27 @@ class UserVerification(models.Model):
         self.save()
         return code
 
-    def generate_verification_link(self):
+    def generate_verification_link(self, email=None, old_email=None):
         domain = env("DOMAIN")
-        url = f"{domain}/api/auth/verify/?email={self.user.username}&code={self.verification_code}"
+        if email and old_email:
+            url = f"{domain}/api/auth/verify/?email={email}&old_email={old_email}&code={self.verification_code}"
+        elif email:
+            url = f"{domain}/api/auth/verify/?email={email}&code={self.verification_code}"
+        else:
+            raise ValueError("Either 'email' or 'old_email' must be provided.")
         return url
 
-    def send_verification_email(self):
-        subject = 'Confirm your email address'
-        verification_link = self.generate_verification_link()
+    def send_verification_email(self, new_email=None):
+        if not new_email:
+            verification_link = self.generate_verification_link(email=self.user.username)
+            to_email = self.user.username
+            subject = 'Confirm your email address'
+        else:
+            verification_link = self.generate_verification_link(email=new_email, old_email=self.user.username)
+            to_email = new_email
+            subject = 'Confirm your new email address'
 
         html_message = render_to_string('verification_email.html', {'verification_code': verification_link})
         plain_message = strip_tags(html_message)
         from_email = env("GMAIL")
-        to_email = self.user.username
         send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
