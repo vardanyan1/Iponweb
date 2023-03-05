@@ -20,26 +20,26 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+
 from .api.customer_api import CustomerViewSet
 from .api.items_category_api import ItemCategoryViewSet
 from .api.item_api import ItemViewSet
-from .api.registration_api import RegistrationView
 from .api.store_category_api import StoreCategoryViewSet
 from .api.store_owner_api import StoreOwnerViewSet
 from .api.store_api import StoreViewSet
 from .api.my_bag_api import MyBagViewSet
 from .api.purchase_api import PurchaseViewSet
+from .api.user_api import RegisterView, VerificationView, ChangePasswordView, LogoutView
 
 urlpatterns = [
-
-                  path('api/auth/login/', RegistrationView.login, name='login'),
-                  path('api/auth/register/', RegistrationView.register, name='register'),
-                  path('api/auth/logout/', RegistrationView.logout, name='logout'),
-                  path('api/auth/refresh-token/', RegistrationView.refresh_token, name='refresh_token'),
-                  path('api/auth/send_verification_code/<int:user_id>/', RegistrationView.send_verification_code,
-                       name='send_verification_code'),
-                  path('api/auth/verify/', RegistrationView.verify, name='verify_user'),
                   path('admin/', admin.site.urls),
+                  path('api/auth/register/', RegisterView.as_view(), name='auth_register'),
+                  path('api/auth/verify/', VerificationView.as_view(), name='verify_user'),
+                  path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/auth/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                  path('api/auth/logout/', LogoutView.as_view(), name='auth_logout'),
+                  path('api/auth/change_password/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
