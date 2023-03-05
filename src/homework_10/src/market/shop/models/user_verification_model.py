@@ -29,9 +29,9 @@ class UserVerification(models.Model):
     def generate_verification_link(self, email=None, old_email=None):
         domain = env("DOMAIN")
         if email and old_email:
-            url = f"{domain}/api/auth/verify/?email={email}&old_email={old_email}&code={self.verification_code}"
+            url = f"{domain}/api/auth/verify/?email={email}&old_email={old_email}&verification_code={self.verification_code}"
         elif email:
-            url = f"{domain}/api/auth/verify/?email={email}&code={self.verification_code}"
+            url = f"{domain}/api/auth/verify/?email={email}&verification_code={self.verification_code}"
         else:
             raise ValueError("Either 'email' or 'old_email' must be provided.")
         return url
